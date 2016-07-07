@@ -26,8 +26,15 @@
             <td>@item.BirthDateDisplay</td>
             <td>@item.Email </td>
             <td>@item.Phone</td>
-            <td>@item.AddDate</td>
-            <td>@item.ModifiedDate</td>
+            <td>@item.AddDate.ToShortDateString()</td>
+            @if (item.ModifiedDate.HasValue)
+            {
+                <td>@item.ModifiedDate.Value.ToShortDateString()</td>
+            }
+            else
+            {
+                <td> </td>
+            }
             <td>@item.BooksBorrowed</td>
             @if(item.IsActive)
             {

@@ -133,8 +133,7 @@ namespace WebModelService
 
         public UserViewModel UserDetails(int userId)
         {
-            var query = (from x in _library.User where x.UserId == userId select x)
-                            .Select(u => new
+            var query = (from x in _library.User where x.UserId == userId select x).Select(u => new
                             {
                                 UserId = u.UserId,
                                 FirstName = u.FirstName,
@@ -192,6 +191,15 @@ namespace WebModelService
                 History = historyOfBorrows,
             };
             
+        }
+
+        public bool DoEmailExist(string email)
+        {
+            var query = (from x in _library.User where x.Email == email select x).FirstOrDefault();
+
+            if (query == null)
+                return false;
+            return true;
         }
     }
 }

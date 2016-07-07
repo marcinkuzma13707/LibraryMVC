@@ -18,6 +18,8 @@ namespace WebModelService.Interfaces
         void DeleteUser(int id);
 
         UserViewModel UserDetails(int userId);
+
+        bool DoEmailExist(string email);
         
     }
 }

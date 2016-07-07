@@ -17,6 +17,7 @@
     <br />
     @Html.LabelFor(a => a.Email)
     @Html.TextBoxFor(a => a.Email)
+    @Html.ValidationMessage("UniqueEmail")
     @Html.ValidationMessageFor(a => a.Email)
     <br />
     @Html.LabelFor(a => a.Phone)
@@ -24,7 +25,7 @@
     @Html.ValidationMessageFor(a => a.Phone)
     <br />
     @Html.LabelFor(a => a.BirthDate)
-    @Html.TextBoxFor(a => @a.BirthDateDisplay)
+    @Html.TextBoxFor(a => @a.BirthDate, "{0:MM/dd/yyyy}")
     @Html.ValidationMessageFor(a => a.BirthDate)
 
    

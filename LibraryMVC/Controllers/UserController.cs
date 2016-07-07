@@ -29,7 +29,7 @@ namespace LibraryMVC.Controllers
         [HttpGet]
         public ActionResult AddUser()
         { UserViewModel viewModel = new UserViewModel();
-            
+           
             return View(viewModel);
         }
         [HttpPost]
@@ -37,12 +37,23 @@ namespace LibraryMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
+                
                 return View(newUser);
             }
             else
             {
-                _userService.AddUser(newUser);
-                return RedirectToAction("Index", "User");
+
+                if (_userService.DoEmailExist(newUser.Email))
+                {
+                    ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
+                    return View(newUser);
+
+                }
+                else
+                {
+                    _userService.AddUser(newUser);
+                    return RedirectToAction("Index", "User");
+                }
             }
 
         }
@@ -74,8 +85,19 @@ namespace LibraryMVC.Controllers
             }
             else
             {
-                _userService.UserEdit(viewModel);
-                return RedirectToAction("Index", "User");
+
+                if (_userService.DoEmailExist(viewModel.Email))
+                {
+                    ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
+                    return View(viewModel);
+
+                }
+                else
+                {
+                    _userService.UserEdit(viewModel);
+                    return RedirectToAction("Index", "User");
+                }
+
             }
         }
 
