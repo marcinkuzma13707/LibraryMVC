@@ -22,16 +22,11 @@ namespace WebModelService
             
         }
 
-
-     
-
-     
-
         public UserViewModel GetUser(int userId)
         {  
             var userDetails = _library.User.SingleOrDefault(u => u.UserId == userId);
 
-             UserViewModel userViewModel = new UserViewModel();
+            UserViewModel userViewModel = new UserViewModel();
             userViewModel.UserId = userDetails.UserId;
             userViewModel.FirstName = userDetails.FirstName;
             userViewModel.LastName = userDetails.LastName;
@@ -53,9 +48,7 @@ namespace WebModelService
             user.LastName = userViewModel.LastName;
             user.Phone = userViewModel.Phone;
             user.Email = userViewModel.Email;
-      
-                user.BirthDate =userViewModel.BirthDate ?? DateTime.Now;
-            
+            user.BirthDate =userViewModel.BirthDate ?? DateTime.Now;
             user.ModifiedDate = DateTime.Now;
             _library.SaveChanges();
         }
@@ -65,7 +58,7 @@ namespace WebModelService
 
 
             var userList = from u in _library.User
-                           join borrow1 in _library.Borrow on u.UserId equals borrow1.UserId into borrowedCount
+                           join borrow in _library.Borrow on u.UserId equals borrow.UserId into borrowedCount
                            from b in borrowedCount.DefaultIfEmpty()
                            select new UserViewModel
                            {
@@ -164,20 +157,13 @@ namespace WebModelService
             userViewModel.Borrows = activeBorrows;
             userViewModel.History = historyOfBorrows;
 
-
-
             return userViewModel;
-         
-            
         }
 
-        public bool DoEmailExist(string email)
+        public bool DoEmailExist(string email, int? id)
         {
-            var query = (from x in _library.User where x.Email == email select x).FirstOrDefault();
-
-            if (query == null)
-                return false;
-            return true;
+            bool emailIncorrect = (from x in _library.User where x.Email == email && x.UserId != id select x).Any();
+            return emailIncorrect;
         }
     }
 }

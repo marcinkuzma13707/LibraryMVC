@@ -37,7 +37,7 @@ namespace LibraryMVC.Controllers
         public ActionResult AddUser(UserViewModel newUser)
         {
 
-            if (_userService.DoEmailExist(newUser.Email))
+            if (_userService.DoEmailExist(newUser.Email, null))
             {
                 ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
             }
@@ -73,11 +73,7 @@ namespace LibraryMVC.Controllers
         [HttpPost]
         public ActionResult EditUser(UserViewModel viewModel)
         {
-            UserViewModel userViewModel = new UserViewModel();
-            userViewModel = _userService.GetUser(viewModel.UserId);
-            string email = _userService.GetUser(viewModel.UserId).Email;
-
-            if (_userService.DoEmailExist(viewModel.Email)&&!viewModel.Email.Equals(email))
+            if (_userService.DoEmailExist(viewModel.Email, viewModel.UserId))
             {
                 ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
             }

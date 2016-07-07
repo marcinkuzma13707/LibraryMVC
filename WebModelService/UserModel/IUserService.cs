@@ -19,7 +19,7 @@ namespace WebModelService.Interfaces
 
         UserViewModel UserDetails(int userId);
 
-        bool DoEmailExist(string email);
+        bool DoEmailExist(string email, int? id);
         
     }
 }
