@@ -175,21 +175,23 @@ namespace WebModelService
                         ToDate = x.ToDate
                     });
             }
+            UserViewModel userV = new UserViewModel();
+            userV.UserId = user.UserId;
+                 userV.FirstName = user.FirstName;
+            userV.LastName = user.LastName;
+            userV.BirthDate = user.BirthDate;
+            userV.Email = user.Email;
+            userV.Phone = user.Phone;
+            userV.AddDate = user.AddDate;
+            userV.ModifiedDate = user.ModifiedDate;
+            userV.IsActive = user.IsActive;
+            userV.Borrows = activeBorrows;
+            userV.History = historyOfBorrows;
 
-            return new UserViewModel
-            {
-                UserId = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                BirthDate = user.BirthDate,
-                Email = user.Email,
-                Phone = user.Phone,
-                AddDate = user.AddDate,
-                ModifiedDate = user.ModifiedDate,
-                IsActive = user.IsActive,
-                Borrows = activeBorrows,
-                History = historyOfBorrows,
-            };
+
+
+            return userV;
+         
             
         }
 
