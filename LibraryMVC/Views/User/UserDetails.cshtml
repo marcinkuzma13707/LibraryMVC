@@ -1,0 +1,115 @@
+﻿@model WebModelService.ViewModel.UserViewModel
+
+@{
+    ViewBag.Title = "UserDetails";
+}
+
+<h3>User Details</h3>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+    </dl>
+</div>
+<h3>Active Borrows</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            From Date
+        </th>
+        <th>
+            To Date
+        </th>
+        <th>
+            Is returned?
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Borrows)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsReturned)
+            </td>
+
+        </tr>
+
+    }
+</table>
+
+<h3>Borrows History</h3>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            From Date
+        </th>
+        <th>
+            To Date
+        </th>
+        <th>
+            Is returned
+        </th>
+
+    </tr>
+@foreach (var item in Model.History)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem=>item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromDate, "{0:MM/dd/yyyy}")
+        </td>
+        <td>
+           @Html.DisplayFor(modelItem => item.ToDate, "{0:MM/dd/yyyy}")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsReturned)
+        </td>
+
+
+
+
+    </tr>
+
+
+}
+
+
+
+
+
+
+
+</table>

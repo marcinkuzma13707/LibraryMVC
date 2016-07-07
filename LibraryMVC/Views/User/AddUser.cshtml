@@ -1,0 +1,38 @@
+﻿@model WebModelService.ViewModel.UserViewModel
+@{
+    ViewBag.Title = "AddUser";
+}
+
+<h2>AddUser</h2>
+
+@using (Html.BeginForm("AddUser", "User"))
+{
+    @Html.LabelFor(a => a.FirstName)
+    @Html.TextBoxFor(a => a.FirstName)
+    @Html.ValidationMessageFor(a => a.FirstName)
+    <br />
+    @Html.LabelFor(a => a.LastName)
+    @Html.TextBoxFor(a => a.LastName)
+    @Html.ValidationMessageFor(a => a.LastName)
+    <br />
+    @Html.LabelFor(a => a.Email)
+    @Html.TextBoxFor(a => a.Email)
+    @Html.ValidationMessageFor(a => a.Email)
+    <br />
+    @Html.LabelFor(a => a.Phone)
+    @Html.TextBoxFor(a => a.Phone)
+    @Html.ValidationMessageFor(a => a.Phone)
+    <br />
+    @Html.LabelFor(a => a.BirthDate)
+    @Html.TextBoxFor(a => @a.BirthDateDisplay)
+    @Html.ValidationMessageFor(a => a.BirthDate)
+
+   
+    @Html.HiddenFor(model => model.AddDate);
+   
+
+    <input type="submit" value="Add user" />
+    <a href='@Url.Action("Index", "User")'>Cancel</a>
+
+}
+

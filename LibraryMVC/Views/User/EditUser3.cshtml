@@ -1,0 +1,29 @@
+﻿@model WebModelService.ViewModel.UserViewModel
+
+
+
+<h2>Edit</h2>
+@using (Html.BeginForm("EditUser", "User"))
+{
+    @Html.LabelFor(a=>a.FirstName)
+    @Html.TextBoxFor(a=>a.FirstName)
+    @Html.ValidationMessageFor(a=>a.FirstName)
+
+    @Html.LabelFor(a=>a.LastName)
+    @Html.TextBoxFor(a=>a.LastName)
+
+    @Html.LabelFor(a => a.Email)
+    @Html.TextBoxFor(a => a.Email)
+
+    @Html.LabelFor(a => a.Phone)
+    @Html.TextBoxFor(a => a.Phone)
+
+    @Html.LabelFor(a => a.BirthDate)
+    @Html.TextBoxFor(a=>a.BirthDate)
+
+    <input type="submit"value="Update" />
+    <a href='@Url.Action("Index", "User")'>Cancel</a>
+
+}
+
+

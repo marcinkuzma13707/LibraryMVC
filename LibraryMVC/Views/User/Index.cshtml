@@ -1,0 +1,64 @@
+﻿@model List<WebModelService.ViewModel.UserViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div>
+
+    <table border="1" style="width:100%">
+        <tr>
+            <td>User Name</td>
+            <td>Birth Date</td>
+            <td>Email</td>
+            <td>Phone</td>
+            <td>Add Date</td>
+            <td>Modiffied</td>
+            <td>Books Borrowed</td>
+            <td>Active</td>
+            <td> </td>
+        </tr>
+       @foreach (var item in Model)
+       {
+        <tr>
+            <td>@item.FirstName @item.LastName</td>
+            <td>@item.BirthDateDisplay</td>
+            <td>@item.Email </td>
+            <td>@item.Phone</td>
+            <td>@item.AddDate</td>
+            <td>@item.ModifiedDate</td>
+            <td>@item.BooksBorrowed</td>
+            @if(item.IsActive)
+            {
+                <td>Yes</td>
+            }
+            else
+            {
+                <td>No</td>
+            }
+
+
+            <td>
+                <a href='@Url.Action("EditUser", "User",
+                new { userId = item.UserId})'>Edit</a>,
+              
+                <a href="@Url.Action("DeleteUser", "User", new { userId = item.UserId })" onclick="return confirm('Are you sure?');">Delete</a>,
+                <a href='@Url.Action("UserDetails", "User",
+                new { userId = item.UserId})'>Show details</a>
+
+
+            </td>
+         </tr>
+       }
+        <tr><td>
+                <a href='@Url.Action("AddUser", "User" )'>Add user</a> 
+        </td></tr>
+
+       
+       </table>
+
+
+</div>
+
+
