@@ -18,43 +18,37 @@ namespace LibraryMVC.Controllers
         public UserController(IUserService userService)
         {
             this._userService = userService;
-        }
-        
+        }   
     
         public ActionResult Index()
         {
             List<UserViewModel> list = _userService.UserList();
             return View(list);
         }
+
         [HttpGet]
         public ActionResult AddUser()
-        { UserViewModel viewModel = new UserViewModel();
-           
+        {
+            UserViewModel viewModel = new UserViewModel();
             return View(viewModel);
         }
+
         [HttpPost]
         public ActionResult AddUser(UserViewModel newUser)
         {
+
+            if (_userService.DoEmailExist(newUser.Email))
+            {
+                ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
+            }
+
             if (!ModelState.IsValid)
             {
-                
                 return View(newUser);
             }
-            else
-            {
 
-                if (_userService.DoEmailExist(newUser.Email))
-                {
-                    ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
-                    return View(newUser);
-
-                }
-                else
-                {
-                    _userService.AddUser(newUser);
-                    return RedirectToAction("Index", "User");
-                }
-            }
+            _userService.AddUser(newUser);
+            return RedirectToAction("Index", "User");
 
         }
 
@@ -78,27 +72,23 @@ namespace LibraryMVC.Controllers
 
         [HttpPost]
         public ActionResult EditUser(UserViewModel viewModel)
-        {   
+        {
+            UserViewModel userViewModel = new UserViewModel();
+            userViewModel = _userService.GetUser(viewModel.UserId);
+            string email = _userService.GetUser(viewModel.UserId).Email;
+
+            if (_userService.DoEmailExist(viewModel.Email)&&!viewModel.Email.Equals(email))
+            {
+                ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
+            }
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
-            else
-            {
 
-                if (_userService.DoEmailExist(viewModel.Email))
-                {
-                    ModelState.AddModelError("UniqueEmail", "Email nie jest unikalny");
-                    return View(viewModel);
-
-                }
-                else
-                {
-                    _userService.UserEdit(viewModel);
-                    return RedirectToAction("Index", "User");
-                }
-
-            }
+            _userService.UserEdit(viewModel);
+             return RedirectToAction("Index", "User");
+      
         }
 
     }

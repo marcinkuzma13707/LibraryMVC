@@ -42,6 +42,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookModel\BookService.cs" />
     <Compile Include="BookModel\Contract\ViewModel\BookViewModel.cs" />
     <Compile Include="BookModel\IBookService.cs" />
     <Compile Include="BorrowModel\Contract\ViewModel\BorrowViewModel.cs" />

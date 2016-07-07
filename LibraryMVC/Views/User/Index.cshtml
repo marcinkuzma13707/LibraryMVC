@@ -23,7 +23,7 @@
        {
         <tr>
             <td>@item.FirstName @item.LastName</td>
-            <td>@item.BirthDateDisplay</td>
+            <td>@item.BirthDate.Value.ToShortDateString()</td>
             <td>@item.Email </td>
             <td>@item.Phone</td>
             <td>@item.AddDate.ToShortDateString()</td>
@@ -49,8 +49,13 @@
             <td>
                 <a href='@Url.Action("EditUser", "User",
                 new { userId = item.UserId})'>Edit</a>,
+
+              @if(item.IsActive == true && item.BooksBorrowed==0)
+              {
+                <a href='@Url.Action("DeleteUser", "User", new { userId = item.UserId })'onclick = "return confirm('Are you sure you wish to delete this user?');" >Delete</a>
+              }
               
-                <a href="@Url.Action("DeleteUser", "User", new { userId = item.UserId })" onclick="return confirm('Are you sure?');">Delete</a>,
+            
                 <a href='@Url.Action("UserDetails", "User",
                 new { userId = item.UserId})'>Show details</a>
 

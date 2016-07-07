@@ -29,23 +29,20 @@ namespace WebModelService
 
         public UserViewModel GetUser(int userId)
         {  
-            var user = from u in _library.User
-                          where u.UserId == userId
-                          select u;
             var userDetails = _library.User.SingleOrDefault(u => u.UserId == userId);
 
-             UserViewModel userDTO = new UserViewModel();
-            userDTO.UserId = userDetails.UserId;
-            userDTO.FirstName = userDetails.FirstName;
-            userDTO.LastName = userDetails.LastName;
-            userDTO.BirthDate = userDetails.BirthDate;
-            userDTO.Email = userDetails.Email;
-            userDTO.Phone = userDetails.Phone;
-            userDTO.AddDate = userDetails.AddDate;
-            userDTO.ModifiedDate = userDetails.ModifiedDate;
-            userDTO.IsActive = userDetails.IsActive;
+             UserViewModel userViewModel = new UserViewModel();
+            userViewModel.UserId = userDetails.UserId;
+            userViewModel.FirstName = userDetails.FirstName;
+            userViewModel.LastName = userDetails.LastName;
+            userViewModel.BirthDate = userDetails.BirthDate;
+            userViewModel.Email = userDetails.Email;
+            userViewModel.Phone = userDetails.Phone;
+            userViewModel.AddDate = userDetails.AddDate;
+            userViewModel.ModifiedDate = userDetails.ModifiedDate;
+            userViewModel.IsActive = userDetails.IsActive;
 
-            return userDTO;
+            return userViewModel;
         }
 
         public void UserEdit(UserViewModel userViewModel)
@@ -56,7 +53,9 @@ namespace WebModelService
             user.LastName = userViewModel.LastName;
             user.Phone = userViewModel.Phone;
             user.Email = userViewModel.Email;
-            user.BirthDate=userViewModel.BirthDate;
+      
+                user.BirthDate =userViewModel.BirthDate ?? DateTime.Now;
+            
             user.ModifiedDate = DateTime.Now;
             _library.SaveChanges();
         }
@@ -64,29 +63,10 @@ namespace WebModelService
         public List<UserViewModel> UserList()
         {
 
-            //var list = from u in _library.User
-            //            select u;
-            // List<UserViewModel> listDTO = new List<UserViewModel>();
-            // foreach (User u in list)
-            // {
-            //     UserViewModel userDTO = new UserViewModel();
-            //     userDTO.UserId = u.UserId;
-            //     userDTO.FirstName = u.FirstName;
-            //     userDTO.LastName = u.LastName;
-            //     userDTO.BirthDate = u.BirthDate;
-            //     userDTO.Email = u.Email;
-            //     userDTO.Phone = u.Phone;
-            //     userDTO.AddDate = u.AddDate;
-            //     userDTO.ModifiedDate = u.ModifiedDate;
-            //     userDTO.IsActive = u.IsActive;
-
-            //     listDTO.Add(userDTO);
-            // }
 
             var userList = from u in _library.User
-                           join b1 in _library.Borrow on u.UserId equals b1.UserId into borrowedCount
+                           join borrow1 in _library.Borrow on u.UserId equals borrow1.UserId into borrowedCount
                            from b in borrowedCount.DefaultIfEmpty()
-                               //from b in context.Borrows.Where(x => x.UserId == u.UserId).DefaultIfEmpty()
                            select new UserViewModel
                            {
                                UserId = u.UserId,
@@ -116,7 +96,7 @@ namespace WebModelService
             user.LastName = newUser.LastName;
             user.Email = newUser.Email;
             user.Phone = newUser.Phone;
-            user.BirthDate = newUser.BirthDate;
+            user.BirthDate = newUser.BirthDate ?? DateTime.Now;
             user.IsActive = true;
             user.AddDate = DateTime.Now;
             _library.User.Add(user);
@@ -133,7 +113,7 @@ namespace WebModelService
 
         public UserViewModel UserDetails(int userId)
         {
-            var query = (from x in _library.User where x.UserId == userId select x).Select(u => new
+            var query = (from u in _library.User where u.UserId == userId select new
                             {
                                 UserId = u.UserId,
                                 FirstName = u.FirstName,
@@ -156,41 +136,37 @@ namespace WebModelService
             var activeBorrows = new List<BorrowViewModel>();
             var historyOfBorrows = new List<BorrowViewModel>();
 
-            foreach (var x in user.Borrows)
+            historyOfBorrows.AddRange(user.Borrows.Where(x => x.IsReturned).Select(x => new BorrowViewModel {
+                FromDate = x.FromDate,
+                IsReturned = x.IsReturned,
+                Title = x.Title,
+                ToDate = x.ToDate
+            }).ToList());
+
+            activeBorrows.AddRange(user.Borrows.Where(x => !x.IsReturned).Select(x => new BorrowViewModel
             {
-                if (x.IsReturned)
-                    historyOfBorrows.Add(new BorrowViewModel
-                    {
-                        FromDate = x.FromDate,
-                        IsReturned = x.IsReturned,
-                        Title = x.Title,
-                        ToDate = x.ToDate
-                    });
-                else
-                    activeBorrows.Add(new BorrowViewModel
-                    {
-                        FromDate = x.FromDate,
-                        IsReturned = x.IsReturned,
-                        Title = x.Title,
-                        ToDate = x.ToDate
-                    });
-            }
-            UserViewModel userV = new UserViewModel();
-            userV.UserId = user.UserId;
-                 userV.FirstName = user.FirstName;
-            userV.LastName = user.LastName;
-            userV.BirthDate = user.BirthDate;
-            userV.Email = user.Email;
-            userV.Phone = user.Phone;
-            userV.AddDate = user.AddDate;
-            userV.ModifiedDate = user.ModifiedDate;
-            userV.IsActive = user.IsActive;
-            userV.Borrows = activeBorrows;
-            userV.History = historyOfBorrows;
+                FromDate = x.FromDate,
+                IsReturned = x.IsReturned,
+                Title = x.Title,
+                ToDate = x.ToDate
+            }).ToList());
+
+            UserViewModel userViewModel = new UserViewModel();
+            userViewModel.UserId = user.UserId;
+            userViewModel.FirstName = user.FirstName;
+            userViewModel.LastName = user.LastName;
+            userViewModel.BirthDate = user.BirthDate;
+            userViewModel.Email = user.Email;
+            userViewModel.Phone = user.Phone;
+            userViewModel.AddDate = user.AddDate;
+            userViewModel.ModifiedDate = user.ModifiedDate;
+            userViewModel.IsActive = user.IsActive;
+            userViewModel.Borrows = activeBorrows;
+            userViewModel.History = historyOfBorrows;
 
 
 
-            return userV;
+            return userViewModel;
          
             
         }
