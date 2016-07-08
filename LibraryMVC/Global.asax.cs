@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using WebModelService;
+using WebModelService.BookModel;
 using WebModelService.Interfaces;
 
 namespace LibraryMVC
@@ -23,6 +24,9 @@ namespace LibraryMVC
             .InstancePerDependency();
             builder.RegisterType<Library>()
             .As<Library>();
+            builder.RegisterType<BookService>()
+             .As<IBookService>()
+            .InstancePerDependency();
 
             // Register your MVC controllers.
             builder.RegisterControllers(typeof(MvcApplication).Assembly);

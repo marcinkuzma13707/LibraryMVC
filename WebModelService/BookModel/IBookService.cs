@@ -7,8 +7,9 @@ using WebModelService.BookModel.Contract.ViewModel;
 
 namespace WebModelService.Interfaces
 {
-    interface IBookService
+    public interface IBookService
     {
-        List<BookViewModel> BookList();
+        IEnumerable<BookViewModel> BookList();
+        void AddBook(AddBookModel newBook);
     }
 }

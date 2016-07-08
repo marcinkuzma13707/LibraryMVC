@@ -40,9 +40,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookModel\BookService.cs" />
+    <Compile Include="BookModel\Contract\ViewModel\AddBookModel.cs" />
     <Compile Include="BookModel\Contract\ViewModel\BookViewModel.cs" />
     <Compile Include="BookModel\IBookService.cs" />
     <Compile Include="BorrowModel\Contract\ViewModel\BorrowViewModel.cs" />
@@ -113,6 +115,11 @@
       <Project>{F630829A-47A9-4592-9C17-83E06DCBE257}</Project>
       <Name>LibraryDataAccess</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

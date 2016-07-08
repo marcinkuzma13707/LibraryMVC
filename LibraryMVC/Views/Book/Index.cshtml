@@ -1,0 +1,75 @@
+﻿@model IEnumerable<WebModelService.BookModel.Contract.ViewModel.BookViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@(Html.Kendo().Grid<WebModelService.BookModel.Contract.ViewModel.BookViewModel>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(b => b.BookId).Width(120);
+            columns.Bound(b => b.Title).Width(120);
+            columns.Bound(b => b.Author).Width(120);
+            columns.Bound(b => b.ISBN).Width(120);
+            columns.Bound(b => b.BookGenreName).Width(120);
+            columns.Bound(b => b.AddDate).Width(120).Format("{0:dd/MM/yyyy}");
+            columns.Bound(b => b.ReleaseDate).Width(120).Format("{0:dd/MM/yyyy}");
+            columns.Bound(b => b.Count).Width(120);
+        })
+        .HtmlAttributes(new { style = "height: 550px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Books_Read", "Book"))
+            .PageSize(10)
+        )
+)
+<button id="addButton" type="button" class="btn btn-success">Add new book</button>
+
+@(Html.Kendo().Window()
+    .Name("window")
+    .Title("Add new book")
+    .Visible(false)
+    .LoadContentFrom("AddBook", "Book")
+    .Iframe(true)
+    .Draggable()
+    .Events(ev => ev.Close("onKendoClose"))
+    .Resizable()
+     .Width(600)
+    .Height(450)
+    .Modal(true)
+)
+
+
+
+<style>
+
+</style>
+
+<script>
+
+    function onKendoClose() {
+        $("#addButton").show();
+    }
+
+    $(document).ready(function () {
+        $("#addButton").bind("click", function () {
+            $("#window").data("kendoWindow").center().open();     
+            $("#addButton").hide();
+        });
+
+        $.getJSON("Book/AddBook", function (data) {
+            if (data === true) {
+                $("#window").dialog("close");
+              
+            }
+        });
+
+
+    });
+
+</script>
