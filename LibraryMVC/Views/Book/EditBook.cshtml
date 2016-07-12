@@ -66,7 +66,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="button" value="Save" class="btn btn-default" id="submitBtn" />
+                    <input type="button" value="Save" class="btn btn-default" id="submitBtnEdit" />
                 </div>
             </div>
         </div>
@@ -76,17 +76,6 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 <script>
-    $("#submitBtn").click(function () {
-        var url = '@Url.Action("EditBook", "Book")';
-        var form = $("#submitBtn").closest("form").serialize();
-        $.post(url, form, function callback(response) {
-            if (response.success) {
-                $("#WindowId").data("kendoWindow").close();
-                window.parent.location.reload();
-            }
-            else
-                $("#WindowId").data("kendoWindow").content(response).ToHtmlString();
-        });
-    });
+
 
 </script>

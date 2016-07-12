@@ -1,5 +1,4 @@
-﻿@model IEnumerable<WebModelService.BookModel.Contract.ViewModel.BookViewModel>
-
+﻿
 @{
     ViewBag.Title = "Index";
 }
@@ -85,7 +84,7 @@
             window.refresh({
                 url: '@Url.Action("AddNewBook", "Book")',
                 visible: false,
-                modal: true,           
+                modal: true,
             });
             window.center();
             window.open();
@@ -97,12 +96,29 @@
         $.post(url, form, function callback(response) {
             if (response.success) {
                 $("#AddNewBook").data("kendoWindow").close();
-                window.parent.location.reload();
+                $('#grid').data('kendoGrid').dataSource.read();
+                $('#grid').data('kendoGrid').refresh();
             }
             else
                 $("#AddNewBook").data("kendoWindow").content(response).ToHtmlString();
         });
     });
+    $(document).on("click", "#submitBtnEdit", function () {
+        var url = '@Url.Action("EditBook", "Book")';
+        var form = $("#submitBtnEdit").closest("form").serialize();
+        $.post(url, form, function callback(response) {
+            if (response.success) {
+                $("#WindowId").data("kendoWindow").close();
+                $('#grid').data('kendoGrid').dataSource.read();
+                $('#grid').data('kendoGrid').refresh();
+            }
+            else
+                $("#WindowId").data("kendoWindow").content(response).ToHtmlString();
+        });
+    });
+    $(document).on("click", ".closeBtns", function () {
+            $("#AddNewBook").data("kendoWindow").close();
+        });
 
 
 </script>

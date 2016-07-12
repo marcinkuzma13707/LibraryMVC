@@ -39,6 +39,7 @@ namespace WebModelService.BookModel
         public IEnumerable<BookViewModel> BookList()
         {
             var query = (from book in _library.Book
+                         join genres in _library.DictBookGenre on book.BookGenreId equals genres.BookGenreId
                          select new BookViewModel
                          {
                              BookId = book.BookId,
@@ -46,10 +47,10 @@ namespace WebModelService.BookModel
                              Title = book.Title,
                              ReleaseDate = book.ReleaseDate,
                              ISBN = book.ISBN,
-                             BookGenreName = (from genre in _library.DictBookGenre where book.BookGenreId == genre.BookGenreId select genre.Name).FirstOrDefault(),
-                             Count=book.Count,
-                             AddDate=book.AddDate,
-                             ModifiedDate=book.ModifiedDate
+                             BookGenreName = genres.Name,
+                             Count = book.Count,
+                             AddDate = book.AddDate,
+                             ModifiedDate = book.ModifiedDate
                          });
             return query;
         }
@@ -73,7 +74,7 @@ namespace WebModelService.BookModel
                          where book.BookId == bookId
                          select new EditBookModel
                          {
-                             bookId=book.BookId,
+                             bookId = book.BookId,
                              Author = book.Author,
                              Count = book.Count,
                              BookGenreName = book.DictBookGenre.Name,
@@ -90,32 +91,14 @@ namespace WebModelService.BookModel
                          select new DictBookGenreViewModel
                          {
                              BookGenreId = genre.BookGenreId,
-                             Name=genre.Name
+                             Name = genre.Name
                          });
             return query.ToList();
         }
 
-       public BookDetailsViewModel GetBook(int bookId)
+        public BookDetailsViewModel GetBook(int bookId)
         {
-            var query = (from book in _library.Book where book.BookId == bookId select new
-                            {
-                                BookId = book.BookId,
-                                Title = book.Title,
-                                ReleaseDate = book.ReleaseDate,
-                                ISBN = book.ISBN,
-                                DictBookGenre = book.DictBookGenre,
-                                Count = book.Count,
-                                Author = book.Author,
-                                AddDate = book.AddDate,
-                                ModifiedDate = book.ModifiedDate,
-                                Borrows = book.Borrow.Select(b => new
-                                {
-                                    b.Book.Title,
-                                    b.FromDate,
-                                    b.ToDate,
-                                    b.IsReturned
-                                })
-                            });
+            IQueryable<BookBorrowViewModel> query = GetBookData(bookId);
             var tmpBook = query.SingleOrDefault();
             var activeBorrows = new List<BorrowViewModel>();
             var historyOfBorrows = new List<BorrowViewModel>();
@@ -140,7 +123,7 @@ namespace WebModelService.BookModel
             bookDetails.Title = tmpBook.Title;
             bookDetails.ReleaseDate = tmpBook.ReleaseDate;
             bookDetails.ISBN = tmpBook.ISBN;
-            bookDetails.DictBookGenre = tmpBook.DictBookGenre.Name;
+            bookDetails.DictBookGenre = tmpBook.DictBookGenre;
             bookDetails.Count = tmpBook.Count;
             bookDetails.Author = tmpBook.Author;
             bookDetails.AddDate = tmpBook.AddDate;
@@ -150,6 +133,31 @@ namespace WebModelService.BookModel
             return bookDetails;
         }
 
+        private IQueryable<BookBorrowViewModel> GetBookData(int bookId)
+        {
+            var query = (from book in _library.Book
+                         where book.BookId == bookId
+                         select new BookBorrowViewModel()
+                         {
 
+                             BookId = book.BookId,
+                             Title = book.Title,
+                             ReleaseDate = book.ReleaseDate,
+                             ISBN = book.ISBN,
+                              DictBookGenre = book.DictBookGenre.Name,
+                             Count = book.Count,
+                             Author = book.Author,
+                             AddDate = book.AddDate,
+                             ModifiedDate = book.ModifiedDate,
+                             Borrows = book.Borrow.Select(b => new BorrowViewModel()
+                             {
+                                 Title = b.Book.Title,
+                                 FromDate = b.FromDate,
+                                 ToDate = b.ToDate,
+                                 IsReturned = b.IsReturned,
+                             }).ToList()
+                         });
+            return query;
+        }
     }
 }

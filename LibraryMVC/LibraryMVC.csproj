@@ -893,6 +893,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Borrow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibraryDataAccess\LibraryDataAccess.csproj">

@@ -19,20 +19,24 @@ namespace LibraryMVC.Controllers
             this._bookService = bookService;
         }
 
-        
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
+        [HttpPost]
         public ActionResult Books_Read([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(_bookService.BookList().ToDataSourceResult(request));
+            var data = _bookService.BookList();
+            return Json(data.ToDataSourceResult(request));
         }
+        [HttpGet]
         public ActionResult GetGenres()
         {
             var genreList = _bookService.GenreList();
             return Json(genreList, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
         public ActionResult Details(int id)
         {
             BookDetailsViewModel book = _bookService.GetBook(id);
