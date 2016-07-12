@@ -1,0 +1,161 @@
+﻿@model WebModelService.BookModel.Contract.ViewModel.BookDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(x => x.BookId)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.BookId)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.Author)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.Author)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.Count)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.Count)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.DictBookGenre)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.DictBookGenre)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.AddDate)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.AddDate)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.ReleaseDate)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.ReleaseDate)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.ModifiedDate)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.ModifiedDate)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.Title)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.Title)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(x => x.ISBN)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(x => x.ISBN)
+    </dd>
+
+</dl>
+
+<h3>Active Borrows</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            From Date
+        </th>
+        <th>
+            To Date
+        </th>
+        <th>
+            Is returned?
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Borrows)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsReturned)
+            </td>
+
+        </tr>
+
+    }
+</table>
+
+<h3>Borrows History</h3>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            From Date
+        </th>
+        <th>
+            To Date
+        </th>
+        <th>
+            Is returned
+        </th>
+
+    </tr>
+    @foreach (var item in Model.History)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToDate, "{0:MM/dd/yyyy}")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsReturned)
+            </td>
+        </tr>
+
+
+    }

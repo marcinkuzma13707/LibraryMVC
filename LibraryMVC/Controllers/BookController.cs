@@ -28,25 +28,47 @@ namespace LibraryMVC.Controllers
         {
             return Json(_bookService.BookList().ToDataSourceResult(request));
         }
-
+        public ActionResult GetGenres()
+        {
+            var genreList = _bookService.GenreList();
+            return Json(genreList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Details(int id)
+        {
+            BookDetailsViewModel book = _bookService.GetBook(id);
+            return PartialView(book);
+        }
         [HttpGet]
-        public ActionResult AddBook()
-        {   
-            return View();
+        public ActionResult AddNewBook()
+        {
+            AddBookModel newBook = new AddBookModel();
+            return PartialView(newBook);
         }
         [HttpPost]
-        public ActionResult AddBook(AddBookModel newBook)
+        public ActionResult AddNewBook(AddBookModel newBook)
         {
             if (!ModelState.IsValid)
             {
-                return View(newBook);
+                return PartialView(newBook);
             }
-
-            //_bookService.AddBook(newBook);
-
+            _bookService.AddBook(newBook);
             return Json(new { success = true });
         }
-
+        [HttpGet]
+        public ActionResult EditBook(int id)
+        {
+            return PartialView(_bookService.FindBook(id));
+        }
+        [HttpPost]
+        public ActionResult EditBook(EditBookModel editedBook)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView(editedBook);
+            }
+            _bookService.EditBook(editedBook);
+            return Json(new { success = true });
+        }
 
     }
 }

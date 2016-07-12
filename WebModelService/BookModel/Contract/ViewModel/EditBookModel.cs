@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace WebModelService.BookModel.Contract.ViewModel
 {
-    public class AddBookModel
+    public class EditBookModel
     {
+        public int bookId { get; set; }
         [DisplayName("Author")]
         [Required]
         [MaxLength(50)]
@@ -34,8 +35,5 @@ namespace WebModelService.BookModel.Contract.ViewModel
 
 
         public DateTime? ModifiedDate { get; set; }
-
-      
-
     }
 }

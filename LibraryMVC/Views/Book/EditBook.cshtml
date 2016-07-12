@@ -1,0 +1,92 @@
+﻿@model WebModelService.BookModel.Contract.ViewModel.EditBookModel
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Edit Book</h4>
+        <hr />
+        @Html.HiddenFor(model => model.bookId)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReleaseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReleaseDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ReleaseDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ISBN, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ISBN, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ISBN, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>
+            @Html.LabelFor(b => b.BookGenreName)
+            @(Html.Kendo().DropDownList()
+                     .Name("BookGenreName")
+                     .DataTextField("Name")
+                     .DataValueField("Name")
+                     .DataSource(source =>
+                     {
+                         source.Read(read =>
+                         {
+                             read.Action("GetGenres", "Book");
+                         });
+                     })
+
+          .HtmlAttributes(new { style = "width: 35%" })
+            )
+        </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Count, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @class = "form-control", min = 0 } })
+                    @Html.ValidationMessageFor(model => model.Count, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="button" value="Save" class="btn btn-default" id="submitBtn" />
+                </div>
+            </div>
+        </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script>
+    $("#submitBtn").click(function () {
+        var url = '@Url.Action("EditBook", "Book")';
+        var form = $("#submitBtn").closest("form").serialize();
+        $.post(url, form, function callback(response) {
+            if (response.success) {
+                $("#WindowId").data("kendoWindow").close();
+                window.parent.location.reload();
+            }
+            else
+                $("#WindowId").data("kendoWindow").content(response).ToHtmlString();
+        });
+    });
+
+</script>

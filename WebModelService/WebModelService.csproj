@@ -45,7 +45,9 @@
   <ItemGroup>
     <Compile Include="BookModel\BookService.cs" />
     <Compile Include="BookModel\Contract\ViewModel\AddBookModel.cs" />
+    <Compile Include="BookModel\Contract\ViewModel\BookDetailsViewModel.cs" />
     <Compile Include="BookModel\Contract\ViewModel\BookViewModel.cs" />
+    <Compile Include="BookModel\Contract\ViewModel\EditBookModel.cs" />
     <Compile Include="BookModel\IBookService.cs" />
     <Compile Include="BorrowModel\Contract\ViewModel\BorrowViewModel.cs" />
     <Compile Include="BorrowModel\IBorrowService.cs" />

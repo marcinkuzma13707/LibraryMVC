@@ -572,13 +572,19 @@
     <Content Include="Content\kendo\2016.2.607\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.607\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.607\images\kendoui.woff" />
-    <None Include="scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="scripts\jquery-1.10.2.js" />
-    <Content Include="scripts\jquery-1.10.2.min.js" />
+    <None Include="scripts\jquery-3.0.0.intellisense.js" />
+    <Content Include="scripts\jquery-3.0.0.js" />
+    <Content Include="scripts\jquery-3.0.0.min.js" />
+    <Content Include="scripts\jquery-3.0.0.slim.js" />
+    <Content Include="scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="scripts\kendo.modernizr.custom.js" />
     <Content Include="scripts\kendo\2016.2.607\angular.min.js" />
     <Content Include="scripts\kendo\2016.2.607\jquery.min.js" />
     <Content Include="scripts\kendo\2016.2.607\jszip.min.js" />
+    <Content Include="scripts\jquery-3.0.0.slim.min.map" />
+    <Content Include="scripts\jquery-3.0.0.min.map" />
     <None Include="scripts\kendo\2016.2.607\kendo.all-vsdoc.js" />
     <None Include="scripts\kendo\2016.2.607\kendo.all.min.intellisense.js" />
     <Content Include="scripts\kendo\2016.2.607\kendo.all.min.js" />
@@ -736,7 +742,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\User\AddUser.cshtml" />
     <Content Include="Views\User\EditUser.cshtml" />
     <Content Include="Views\User\UserDetails.cshtml" />
@@ -875,7 +880,10 @@
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
     <Content Include="Views\Book\Index.cshtml" />
-    <Content Include="Views\Book\AddBook.cshtml" />
+    <Content Include="Views\Shared\_ScriptLayout.cshtml" />
+    <Content Include="Views\Book\AddNewBook.cshtml" />
+    <Content Include="Views\Book\Details.cshtml" />
+    <Content Include="Views\Book\EditBook.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

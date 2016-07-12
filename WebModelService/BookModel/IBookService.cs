@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebModelService.BookModel.Contract.ViewModel;
+using WebModelService.DictBookGenreModel.Contract.ViewModel;
 
 namespace WebModelService.Interfaces
 {
@@ -11,5 +12,9 @@ namespace WebModelService.Interfaces
     {
         IEnumerable<BookViewModel> BookList();
         void AddBook(AddBookModel newBook);
+        List<DictBookGenreViewModel> GenreList();
+        BookDetailsViewModel GetBook(int bookId);
+        EditBookModel FindBook(int bookId);
+        void EditBook(EditBookModel editedBook);
     }
 }

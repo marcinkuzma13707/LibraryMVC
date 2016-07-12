@@ -1,0 +1,76 @@
+﻿@model WebModelService.BookModel.Contract.ViewModel.AddBookModel
+
+@{
+    Layout = null; 
+}
+
+@using (Html.BeginForm("AddNewBook", "Book"))
+{
+    <fieldset>
+        <legend>Enter details</legend>
+
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(b => b.Author)
+                @Html.TextBoxFor(b => b.Author, new { @class = "form-control", type = "text" })
+                @Html.ValidationMessageFor(b => b.Author)
+            </div>
+
+            <div>
+                @Html.LabelFor(b => b.Title)
+                @Html.TextBoxFor(b => b.Title, new { @class = "form-control", type = "text" })
+                @Html.ValidationMessageFor(b => b.Title)
+            </div>
+
+            <div>
+                @Html.LabelFor(b => b.ISBN)
+                @Html.TextBoxFor(b => b.ISBN, new { @class = "form-control", type = "text" })
+                @Html.ValidationMessageFor(b => b.ISBN)
+            </div>
+
+            <div>
+                @Html.LabelFor(b => b.Count)
+                @Html.TextBoxFor(b => b.Count, new { @class = "form-control", type = "text" })
+                @Html.ValidationMessageFor(b => b.Count)
+            </div>
+            <div>
+                @Html.LabelFor(b => b.ReleaseDate)
+                @Html.Kendo().DatePickerFor(b => b.ReleaseDate)
+                @Html.ValidationMessageFor(b => b.ReleaseDate)
+
+            </div>
+          
+            <div>
+                @Html.LabelFor(b => b.BookGenreName)
+                @(Html.Kendo().DropDownList()
+                     .Name("BookGenreName")
+                     .DataTextField("Name")
+                     .DataValueField("Name")
+                     .DataSource(source =>
+                  {
+                 source.Read(read =>
+                 {
+          read.Action("GetGenres", "Book");
+             });
+          })
+ 
+          .HtmlAttributes(new { style = "width: 35%" })
+                )
+            </div>
+            <div>
+                <input type="button" class="btn btn-success" value="Add book" id="submitButton" />
+                <input type="button" class="btn btn-default" value="Cancel" id="cancelButton" />
+            </div>
+
+        </div>
+    </fieldset>
+
+
+}
+
+<script>
+
+    $("#cancelButton").click(function () { 
+                $("#AddNewBook").data("kendoWindow").close();
+    });
+</script>
