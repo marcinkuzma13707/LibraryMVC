@@ -1,0 +1,221 @@
+﻿@model WebModelService.BorrowModel.Contract.ViewModel.NewBorrowViewModel
+@using (Html.BeginForm("AddNewBorrow", "Borrow"))
+{
+    <div class="container">
+        <div class="form-group">
+            <label>User name</label>
+            @(Html.Kendo().DropDownList()
+                     .Name("UserId")
+                     .DataTextField("FullName")
+                     .DataValueField("UserId")
+                     .DataSource(source =>
+                     {
+                         source.Read(read =>
+                         {
+                             read.Action("GetUsers", "Borrow");
+                         });
+                     })
+
+              .HtmlAttributes(new { style = "width: 35%" })
+            )
+        </div>
+        <div class="container">
+            <label>
+                @Html.LabelFor(model => model.ToDate)
+            </label>
+            
+                 @Html.Kendo().DatePickerFor(model => model.ToDate)
+                @Html.ValidationMessageFor(model => model.ToDate)
+           
+
+
+            </div>
+                <div class="container" id="myForm">
+                    <div class="container">
+                        <strong>Book 1</strong>
+                        <select id="1" class="selector" name="ChosenBooks"></select>
+                    </div>
+                </div>
+                <input type="button" class="btn btn-default" value="Add book" id="addNext" />
+                <input type="button" class="btn btn-default" value="OK" id="submitNewBorrow" />
+            </div>
+            }
+            <script>
+                var dropDownNumber = 1;
+                var books;
+                var staticBooks;
+                var select = document.getElementById("1");
+                var url = '@Url.Action("GetAvailableBooks", "Borrow")';
+                $.get(url, function (result) {
+                    books = result;
+                    firstNumberOfBooks = books.length;
+                    staticBooks = books.slice();
+                    for (var i = 0, at = books[i]; i < books.length; i++) {
+                        var opt = books[i];
+                        var el = document.createElement("option");
+                        el.textContent = books[i].Title;
+                        el.value = books[i].BookId;
+                        select.appendChild(el);
+                    }
+                });
+
+                $('#addNext').on('click', function () {
+                    flag = false;
+                    if (staticBooks.length == dropDownNumber) { alert("No more available books!"); return; }
+                    if (dropDownNumber == 1) {
+
+                        var lastAddedBookId = $('#1').val();
+                        for (var i = 0; i < books.length; i++) {
+                            if (books[i].BookId == lastAddedBookId) {
+                                books.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        removetmp = document.getElementById("removeBook" + dropDownNumber);
+                        removetmp.remove();
+                        var e = document.getElementById(dropDownNumber);
+                        var f = e.options[e.selectedIndex].value;
+
+                        for (var i = 0; i < books.length; i++) {
+                            if (books[i].BookId == f) {
+                                books.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }
+
+                    dropDownNumber++;
+                    var selectId = dropDownNumber;
+                    var content = '<div class="container" id="content' + selectId + '"><strong>Book ' + dropDownNumber + ' </strong><select class="selector" name="ChosenBooks" id="' + selectId + '"></select></div>';
+                    var removeLink = '<a href="#" onClick=removeFunction() id="removeBook' + selectId + '">Remove book</a>';
+                    content += removeLink;
+                    $("#myForm").append(content);
+                    select = document.getElementById(selectId);
+
+                    var selectorsClass = document.getElementsByClassName("selector");
+                    $('option').not(':selected').remove();
+                    for (j = 0; j < selectorsClass.length; j++) {
+                        select = document.getElementById(j + 1);
+                        for (var i = 0, at = books[i]; i < books.length; i++) {
+                            var option = document.createElement("option");
+                            option.value = books[i].BookId;
+                            option.textContent = books[i].Title;
+                            select.appendChild(option);
+                        }
+                    }
+
+                });
+
+                function removeFunction() {
+                    flag = true;
+                    var e = document.getElementById(dropDownNumber);
+                    var f = e.options[e.selectedIndex].value;
+
+                    var isThere = books.some(function (element) {
+                        return element.BookId == f;
+                    });
+                    if (isThere == false) {
+                        for (var j = 0; j < staticBooks.length; j++) {
+                            if (staticBooks[j].BookId == f) {
+                                books.unshift(staticBooks[j]);
+                                break;
+                            }
+                        }
+
+                    }
+                    var e = document.getElementById(dropDownNumber - 1);
+                    f = e.options[e.selectedIndex].value;
+                    isThere = books.some(function (element) {
+                        return element.BookId == f;
+                    });
+                    if (isThere == false) {
+                        for (var j = 0; j < staticBooks.length; j++) {
+                            if (staticBooks[j].BookId == f) {
+                                books.unshift(staticBooks[j]);
+                                break;
+                            }
+                        }
+
+                    }
+                    var selectorsClass = document.getElementsByClassName("selector");
+                    $('option').not(':selected').remove();
+                    var u = selectorsClass.length;
+                    u--;
+                    var last = document.getElementById(u);
+                    $(last).find('option:selected').remove();
+                    for (j = 0; j < selectorsClass.length; j++) {
+                        select = document.getElementById(j + 1);
+                        for (var i = 0, at = books[i]; i < books.length; i++) {
+                            var option = document.createElement("option");
+                            option.value = books[i].BookId;
+                            option.textContent = books[i].Title;
+                            select.appendChild(option);
+                        }
+                    }
+
+                    document.getElementById("content" + dropDownNumber).remove();
+                    document.getElementById("removeBook" + dropDownNumber).remove();
+                    dropDownNumber--;
+                    if (dropDownNumber != 1) {
+                        var removeLink = '<a href="#" onClick=removeFunction() id="removeBook' + dropDownNumber + '">Remove book</a>';
+                        $("#myForm").append(removeLink);
+                    }
+
+                }
+                $("body").on('focusin', ".selector", function () {
+                    $(this).data('val', $(this).val());
+                });
+
+                $("body").on("change", ".selector", function () {
+                    var oldId = $(this).data('val');
+                    var selectedDrop = $(this);
+                    var newId = selectedDrop.find(":selected").val();
+                    var selectorId = $(this).attr('id');
+                    ////jesli nie ma w dostepnych starego to dodaj
+                    
+                    if (selectorId != dropDownNumber) {
+                        var isThere = books.some(function (element) {
+                            return element.BookId == oldId;
+                        });
+                        if (isThere == false) {
+                            for (var j = 0; j < staticBooks.length; j++) {
+                                if (staticBooks[j].BookId == oldId) {
+                                    books.unshift(staticBooks[j]);
+                                    break;
+                                }
+                            }
+                        }
+                        ////jesli jest w dostepnych nowe to wyrzuc
+                        isThere = books.some(function (element) {
+                            return element.BookId == newId;
+                        });
+
+                        if (isThere == true) {
+                            for (var j = 0; j < books.length; j++) {
+                                if (books[j].BookId == newId) {
+                                    books.splice(j, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    var selectorsClass = document.getElementsByClassName("selector");
+                    $('option').not(':selected').remove();
+                    var u = selectorsClass.length;
+                    var last = document.getElementById(u);
+                    $(last).find('option:selected').remove();
+                    
+                    for (j = 0; j < selectorsClass.length; j++) {
+                        select = document.getElementById(j + 1);
+                        for (var i = 0, at = books[i]; i < books.length; i++) {
+                            var option = document.createElement("option");
+                            option.value = books[i].BookId;
+                            option.textContent = books[i].Title;
+                            select.appendChild(option);
+                        }
+                    }
+                    selectedDrop.val(newId);
+                })
+            </script>

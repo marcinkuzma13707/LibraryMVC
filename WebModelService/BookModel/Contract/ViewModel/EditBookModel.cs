@@ -26,13 +26,12 @@ namespace WebModelService.BookModel.Contract.ViewModel
         [Required]
         [MaxLength(50)]
         public string ISBN { get; set; }
-        [Required]
-        [DisplayName("Book Genre")]
-        public string BookGenreName { get; set; }
+        
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "The value must be greater or equal 0")]
         public int Count { get; set; }
-
+        [Required]
+        public int GenreId { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
     }

@@ -50,7 +50,11 @@
     <Compile Include="BookModel\Contract\ViewModel\BookViewModel.cs" />
     <Compile Include="BookModel\Contract\ViewModel\EditBookModel.cs" />
     <Compile Include="BookModel\IBookService.cs" />
+    <Compile Include="BorrowModel\BorrowService.cs" />
+    <Compile Include="BorrowModel\Contract\ViewModel\BookToBorrow.cs" />
+    <Compile Include="BorrowModel\Contract\ViewModel\BorrowedBookViewModel.cs" />
     <Compile Include="BorrowModel\Contract\ViewModel\BorrowViewModel.cs" />
+    <Compile Include="BorrowModel\Contract\ViewModel\NewBorrowViewModel.cs" />
     <Compile Include="BorrowModel\IBorrowService.cs" />
     <Compile Include="DictBookGenreModel\Contract\ViewModel\DictBookGenreViewModel.cs" />
     <Compile Include="ReportModel\IReportService.cs" />

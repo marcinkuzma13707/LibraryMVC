@@ -724,6 +724,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\BorrowController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -884,6 +885,9 @@
     <Content Include="Views\Book\AddNewBook.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\Book\EditBook.cshtml" />
+    <Content Include="Views\Borrow\Index.cshtml" />
+    <Content Include="Views\Borrow\AddNewBorrow.cshtml" />
+    <Content Include="Views\Borrow\UserBooks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -893,7 +897,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Borrow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibraryDataAccess\LibraryDataAccess.csproj">

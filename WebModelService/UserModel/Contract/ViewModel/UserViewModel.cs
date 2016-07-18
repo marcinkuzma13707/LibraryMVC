@@ -55,7 +55,7 @@ namespace WebModelService.ViewModel
         public IEnumerable<BorrowViewModel> Borrows { get; set; }
         [DisplayName("History")]
         public IEnumerable<BorrowViewModel> History { get; set; }
-
+        public string FullName { get; set; }
 
 
 

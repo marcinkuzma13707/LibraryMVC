@@ -43,9 +43,9 @@
             <div>
                 @Html.LabelFor(b => b.BookGenreName)
                 @(Html.Kendo().DropDownList()
-                     .Name("BookGenreName")
+                     .Name("GenreId")
                      .DataTextField("Name")
-                     .DataValueField("Name")
+                     .DataValueField("BookGenreId")
                      .DataSource(source =>
                   {
                  source.Read(read =>
@@ -70,5 +70,7 @@
 
 <script>
 
- 
+    $(function () {
+        $("#AddNewBook").parent().find(".k-window-action").css("visibility", "hidden");
+    });
 </script>

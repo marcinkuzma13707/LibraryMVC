@@ -38,6 +38,7 @@
      .Width(600)
     .Height(650)
     .Modal(true)
+    
 
 )
 @(Html.Kendo().Window().Name("AddNewBook")
@@ -46,6 +47,7 @@
     .Modal(true)
     .Width(600)
     .Height(650)
+    
 )
 
 <script>
@@ -73,34 +75,44 @@
                             title: "Book edit",
                             modal: true,
                             visible: false,
-                            content: url
+                            content: url,
+                            close: onClose
                         }).data("kendoWindow").title("Edit");
         wnd.center().open();
     }
 
-    $(document).ready(function () {
-        $("#addButton2").click(function () {
-            var window = $("#AddNewBook").data("kendoWindow").title("New Book");
-            window.refresh({
-                url: '@Url.Action("AddNewBook", "Book")',
-                visible: false,
-                modal: true,
-            });
-            window.center();
-            window.open();
-        });
+  function onClose(e) {
+      $("#WindowId").data("kendoWindow").content("").ToHtmlString
+                    
+                }
+
+    $(document).on("click", "#addButton2", function () {
+        var window = $("#AddNewBook").data("kendoWindow").title("New Book");
+        var url = '@Url.Action("AddNewBook", "Book")';
+         wnd = $("#AddNewBook")
+                        .kendoWindow({
+                            title: "Add book",
+                            modal: true,
+                            visible: false,
+                            content: url,
+                            
+                        }).data("kendoWindow").title("Add");
+
+        wnd.center().open();
     });
+
     $(document).on("click", "#submitButton", function () {
         var url = '@Url.Action("AddNewBook", "Book")';
         var form = $("#submitButton").closest("form").serialize();
         $.post(url, form, function callback(response) {
             if (response.success) {
                 $("#AddNewBook").data("kendoWindow").close();
+
                 $('#grid').data('kendoGrid').dataSource.read();
                 $('#grid').data('kendoGrid').refresh();
             }
             else
-                $("#AddNewBook").data("kendoWindow").content(response).ToHtmlString();
+                $("#AddNewBook").data("kendoWindow").content(response).ToHtmlString;
         });
     });
     $(document).on("click", "#submitBtnEdit", function () {
@@ -109,15 +121,20 @@
         $.post(url, form, function callback(response) {
             if (response.success) {
                 $("#WindowId").data("kendoWindow").close();
+
                 $('#grid').data('kendoGrid').dataSource.read();
                 $('#grid').data('kendoGrid').refresh();
             }
             else
-                $("#WindowId").data("kendoWindow").content(response).ToHtmlString();
+
+                $("#WindowId").data("kendoWindow").content(response).ToHtmlString;
         });
     });
     $(document).on("click", ".closeBtns", function () {
-            $("#AddNewBook").data("kendoWindow").close();
+        $("#AddNewBook").data("kendoWindow").close();
+        $("#AddNewBook").data("kendoWindow").content("").ToHtmlString;
+        $("#WindowId").data("kendoWindow").close();
+        $("#WindowId").data("kendoWindow").content("").ToHtmlString;
         });
 
 

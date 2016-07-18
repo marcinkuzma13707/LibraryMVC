@@ -71,7 +71,8 @@ namespace WebModelService
                                AddDate = u.AddDate,
                                ModifiedDate = u.ModifiedDate,
                                BooksBorrowed = borrowedCount.Count(),
-                               IsActive = u.IsActive
+                               IsActive = u.IsActive,
+                               FullName=u.FirstName+" "+u.LastName
                            };
 
             List<UserViewModel> noDuplicates = userList.Distinct().ToList();

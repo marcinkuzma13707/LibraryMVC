@@ -1,0 +1,64 @@
+﻿@model WebModelService.ViewModel.UserViewModel
+
+@{
+    ViewBag.Title = "UserBooks";
+}
+
+<h2>UserBooks</h2>
+<div>
+   
+    <table class="table">
+        <tr>
+            <th>
+            @Html.DisplayNameFor(model => model.Borrows.FirstOrDefault().Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows.FirstOrDefault().FromDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrows.FirstOrDefault().ToDate)
+            </th>
+        </tr>
+        @foreach(var borrow in Model.Borrows)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(item=>borrow.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => borrow.FromDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => borrow.ToDate)
+                </td>
+                <td>
+                    <input type="checkbox" class="checkBoxes" value="@borrow.BorrowId">Is returned?
+                </td>
+            </tr>
+
+        }
+        
+    </table>
+    <input type="button" class="btn btn-default" value="Return Books" id="returnUserBooks" />
+</div>
+
+<script>
+    $('#returnUserBooks').on('click', function () {
+        var booksToReturn = new Array();
+        var checkBoxes = document.getElementsByClassName("checkBoxes");
+        for (j = 0; j < checkBoxes.length; j++) {
+            if (checkBoxes[j].checked) {
+                booksToReturn.push(checkBoxes[j].value);
+            }
+        }
+        var url = '@Url.Action("UserBooks","Borrow")';
+        $.post(url, { 'booksToReturn': booksToReturn }, function callback(data) {
+            if (data.success) {
+                window.location.href = '@Url.Action("Index", "Borrow")'
+            }
+            else
+                alert("something went wrong");
+
+        });
+    });
+</script>

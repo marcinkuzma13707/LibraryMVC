@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<button id="addBorrowButton" type="button" class="btn btn-success">Add new borrow</button>
+<h2>Borrowed Books</h2>
+@(Html.Kendo().Grid<WebModelService.BorrowModel.Contract.ViewModel.BorrowedBookViewModel>()
+        .Name("bookGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(b => b.BorrowId).Width(100);
+            columns.Bound(b => b.Title).Width(100);
+            columns.Bound(b => b.User).Width(100);
+            columns.Command(command => command.Custom("Return").Click("returnBook")).Width(80);
+        })
+        .HtmlAttributes(new { style = "height: 350px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetBorrowedBooks", "Borrow"))
+            .PageSize(20)
+        )
+)
+<h2>Users with borrowed books</h2>
+@(Html.Kendo().Grid<WebModelService.ViewModel.UserViewModel>()
+        .Name("userGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(b => b.UserId).Width(100);
+            columns.Bound(b => b.FirstName).Width(100);
+            columns.Bound(b => b.LastName).Width(100);
+            columns.Command(command => command.Custom("Show books").Click("viewBooks")).Width(80);
+        })
+        .HtmlAttributes(new { style = "height: 350px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GetUsersWithBooks", "Borrow"))
+            .PageSize(20)
+        )
+)
+@(Html.Kendo().Window()
+    .Name("WindowId")
+    .Visible(false)
+    .Draggable()
+    .Resizable()
+     .Width(600)
+    .Height(650)
+    .Modal(true)
+)
+<script>
+    function returnBook(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("ReturnBook", "Borrow")';
+        $.post(url, { borrowId: dataItem.BorrowId });
+        $('#bookGrid').data('kendoGrid').dataSource.read();
+        $('#bookGrid').data('kendoGrid').refresh();
+        $('#userGrid').data('kendoGrid').dataSource.read();
+        $('#userGrid').data('kendoGrid').refresh();
+    }
+
+    function viewBooks(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("UserBooks", "Borrow")' + "/" + dataItem.UserId;
+        window.location.href = url;
+    }
+
+    $(document).on("click", "#submitButton", function () {
+        var url = '@Url.Action("AddNewBorrow", "Borrow")';
+        var form = $("#submitButton").closest("form").serialize();
+        $.post(url, form, function callback(response) {
+            if (response.success) {
+                $("#WindowId").data("kendoWindow").close();
+
+            }
+            else
+                $("#WindowId").data("kendoWindow").content(response).ToHtmlString;
+        });
+    });
+    $(document).on("click", "#addBorrowButton", function () {
+        var window = $("#WindowId").data("kendoWindow").title("New Borrow");
+        var url = '@Url.Action("AddNewBorrow", "Borrow")';
+        wnd = $("#WindowId")
+                       .kendoWindow({
+                           title: "Add Borrow",
+                           modal: true,
+                           visible: false,
+                           content: url
+                       }).data("kendoWindow").title("Add");
+
+        wnd.center().open();
+    });
+    $(document).on("click", "#submitNewBorrow", function () {
+        var url = '@Url.Action("AddNewBorrow", "Borrow")';
+        var form = $("#submitNewBorrow").closest("form").serialize();
+        $.post(url, form, function callback(response) {
+            if (response.success) {
+                $("#WindowId").data("kendoWindow").close();
+
+                $('#bookGrid').data('kendoGrid').dataSource.read();
+                $('#bookGrid').data('kendoGrid').refresh();
+                $('#userGrid').data('kendoGrid').dataSource.read();
+                $('#userGrid').data('kendoGrid').refresh();
+            }
+            else
+                $("#WindowId").data("kendoWindow").content(response).ToHtmlString;
+        });
+    });
+
+
+</script>

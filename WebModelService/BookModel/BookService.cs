@@ -30,7 +30,8 @@ namespace WebModelService.BookModel
                 Count = newBook.Count,
                 Author = newBook.Author,
                 AddDate = DateTime.Now,
-                DictBookGenre = (from genres in _library.DictBookGenre where genres.Name == newBook.BookGenreName select genres).SingleOrDefault()
+                DictBookGenre = (from genres in _library.DictBookGenre where genres.BookGenreId == newBook.GenreId select genres).SingleOrDefault()
+               
             };
             _library.Book.Add(book);
             _library.SaveChanges();
@@ -61,7 +62,7 @@ namespace WebModelService.BookModel
             book.Title = editedBook.Title;
             book.Author = editedBook.Author;
             book.Count = editedBook.Count;
-            book.DictBookGenre = (from genre in _library.DictBookGenre where editedBook.BookGenreName == genre.Name select genre).SingleOrDefault();
+            book.DictBookGenre = (from genre in _library.DictBookGenre where editedBook.GenreId == genre.BookGenreId select genre).SingleOrDefault();
             book.ISBN = editedBook.ISBN;
             book.ModifiedDate = DateTime.Now;
             book.ReleaseDate = editedBook.ReleaseDate;
@@ -77,7 +78,7 @@ namespace WebModelService.BookModel
                              bookId = book.BookId,
                              Author = book.Author,
                              Count = book.Count,
-                             BookGenreName = book.DictBookGenre.Name,
+                             GenreId = book.DictBookGenre.BookGenreId,
                              ISBN = book.ISBN,
                              ReleaseDate = book.ReleaseDate,
                              Title = book.Title
@@ -102,7 +103,12 @@ namespace WebModelService.BookModel
             var tmpBook = query.SingleOrDefault();
             var activeBorrows = new List<BorrowViewModel>();
             var historyOfBorrows = new List<BorrowViewModel>();
+            BookDetailsViewModel bookDetails = PrepareBookDetailsModel(tmpBook, activeBorrows, historyOfBorrows);
+            return bookDetails;
+        }
 
+        private static BookDetailsViewModel PrepareBookDetailsModel(BookBorrowViewModel tmpBook, List<BorrowViewModel> activeBorrows, List<BorrowViewModel> historyOfBorrows)
+        {
             historyOfBorrows.AddRange(tmpBook.Borrows.Where(x => x.IsReturned).Select(x => new BorrowViewModel
             {
                 FromDate = x.FromDate,
