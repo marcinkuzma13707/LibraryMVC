@@ -1,7 +1,7 @@
 ﻿@model WebModelService.BorrowModel.Contract.ViewModel.NewBorrowViewModel
 @using (Html.BeginForm("AddNewBorrow", "Borrow"))
 {
-    <div class="container">
+    <div class="container" id="tickets">
         <div class="form-group">
             <label>User name</label>
             @(Html.Kendo().DropDownList()
@@ -25,7 +25,7 @@
             </label>
             
                  @Html.Kendo().DatePickerFor(model => model.ToDate)
-                @Html.ValidationMessageFor(model => model.ToDate)
+                 @Html.ValidationMessageFor(model => model.ToDate)
            
 
 
@@ -41,6 +41,10 @@
             </div>
             }
             <script>
+                $(function () {
+                    $("form").kendoValidator();
+                });
+                var validator = $("#tickets").kendoValidator().data("kendoValidator");
                 var dropDownNumber = 1;
                 var books;
                 var staticBooks;
@@ -106,6 +110,7 @@
                         }
                     }
 
+                    removeSelected();
                 });
 
                 function removeFunction() {
@@ -162,6 +167,7 @@
                         var removeLink = '<a href="#" onClick=removeFunction() id="removeBook' + dropDownNumber + '">Remove book</a>';
                         $("#myForm").append(removeLink);
                     }
+                    removeSelected();
 
                 }
                 $("body").on('focusin', ".selector", function () {
@@ -174,7 +180,7 @@
                     var newId = selectedDrop.find(":selected").val();
                     var selectorId = $(this).attr('id');
                     ////jesli nie ma w dostepnych starego to dodaj
-                    
+                    //debugger;
                     if (selectorId != dropDownNumber) {
                         var isThere = books.some(function (element) {
                             return element.BookId == oldId;
@@ -201,15 +207,25 @@
                             }
                         }
                     }
+                   
                     var selectorsClass = document.getElementsByClassName("selector");
                     $('option').not(':selected').remove();
                     var u = selectorsClass.length;
                     var last = document.getElementById(u);
+                    var lastv = last.value;
+                    if (selectorId == selectorsClass.length)
                     $(last).find('option:selected').remove();
-                    
+                   // $(last).find('option:selected').remove();
+                    alert(selectorId);
+                   // debugger;
                     for (j = 0; j < selectorsClass.length; j++) {
                         select = document.getElementById(j + 1);
                         for (var i = 0, at = books[i]; i < books.length; i++) {
+                            if (selectorId != selectorsClass.length) {
+                                if (j == selectorsClass.length - 1 && books[i].BookId == lastv) continue;
+                            }
+                          
+                           // if (j == selectorsClass.length - 1 && newId==oldId) continue;
                             var option = document.createElement("option");
                             option.value = books[i].BookId;
                             option.textContent = books[i].Title;
@@ -217,5 +233,21 @@
                         }
                     }
                     selectedDrop.val(newId);
+                    removeSelected();
+                    if (selectorId != selectorsClass.length)
+                    $('#' + u + ' option').val(lastv);
+                    
                 })
+                //wyrzuca zaznaczone w ostatnim z pozostalych
+                function removeSelected() {                    
+                    var selectorsClass = document.getElementsByClassName("selector");
+                     var u = selectorsClass.length;
+                    var last = document.getElementById(u);
+                    for (j = 1; j < selectorsClass.length; j++) {
+                        $('#' + j + ' option').each(function () {
+                            if ($(this).val() == last.value)
+                                this.remove();
+                        });
+                    }
+                };
             </script>

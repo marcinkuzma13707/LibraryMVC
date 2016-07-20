@@ -61,13 +61,13 @@
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var url = '@Url.Action("ReturnBook", "Borrow")';
-        $.post(url, { borrowId: dataItem.BorrowId });
-        $('#bookGrid').data('kendoGrid').dataSource.read();
-        $('#bookGrid').data('kendoGrid').refresh();
-        $('#userGrid').data('kendoGrid').dataSource.read();
-        $('#userGrid').data('kendoGrid').refresh();
+        $.post(url, { borrowId: dataItem.BorrowId }, function callback() {
+            $('#bookGrid').data('kendoGrid').dataSource.read();
+            $('#bookGrid').data('kendoGrid').refresh();
+            $('#userGrid').data('kendoGrid').dataSource.read();
+            $('#userGrid').data('kendoGrid').refresh();
+        });
     }
-
     function viewBooks(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -101,6 +101,9 @@
         wnd.center().open();
     });
     $(document).on("click", "#submitNewBorrow", function () {
+        if (!validator.validate()) {
+            return;
+        }
         var url = '@Url.Action("AddNewBorrow", "Borrow")';
         var form = $("#submitNewBorrow").closest("form").serialize();
         $.post(url, form, function callback(response) {

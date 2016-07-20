@@ -12,6 +12,7 @@ using WebModelService;
 using WebModelService.BookModel;
 using WebModelService.BorrowModel;
 using WebModelService.Interfaces;
+using WebModelService.ReportModel;
 
 namespace LibraryMVC
 {
@@ -28,6 +29,9 @@ namespace LibraryMVC
             builder.RegisterType<BookService>()
              .As<IBookService>()
             .InstancePerDependency();
+            builder.RegisterType<ReportService>()
+            .As<IReportService>()
+           .InstancePerDependency();
             builder.RegisterType<BorrowService>()
                 .As<IBorrowService>()
                 .InstancePerDependency();

@@ -57,7 +57,9 @@
     <Compile Include="BorrowModel\Contract\ViewModel\NewBorrowViewModel.cs" />
     <Compile Include="BorrowModel\IBorrowService.cs" />
     <Compile Include="DictBookGenreModel\Contract\ViewModel\DictBookGenreViewModel.cs" />
+    <Compile Include="ReportModel\Contract\ViewModel\MostBorrowedBookViewModel.cs" />
     <Compile Include="ReportModel\IReportService.cs" />
+    <Compile Include="ReportModel\ReportService.cs" />
     <Compile Include="UserModel\IUserService.cs" />
     <Compile Include="UserModel\UserService.cs" />
     <Compile Include="UserModel\Contract\ViewModel\UserViewModel.cs" />
@@ -114,7 +116,7 @@
     <Folder Include="BookModel\Contract\DTOs\" />
     <Folder Include="BorrowModel\Contract\DTOs\" />
     <Folder Include="DictBookGenreModel\Contract\DTOs\" />
-    <Folder Include="ReportModel\Contract\" />
+    <Folder Include="ReportModel\Contract\DTOs\" />
     <Folder Include="UserModel\Contract\DTOs\" />
   </ItemGroup>
   <ItemGroup>

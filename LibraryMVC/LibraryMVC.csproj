@@ -725,6 +725,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\BorrowController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -888,6 +889,10 @@
     <Content Include="Views\Borrow\Index.cshtml" />
     <Content Include="Views\Borrow\AddNewBorrow.cshtml" />
     <Content Include="Views\Borrow\UserBooks.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\MostActiveUsers.cshtml" />
+    <Content Include="Views\Report\MostBorrowedBooks.cshtml" />
+    <Content Include="Views\Report\Filter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

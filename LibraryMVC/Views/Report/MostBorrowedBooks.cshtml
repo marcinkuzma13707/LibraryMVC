@@ -1,0 +1,30 @@
+﻿@model IQueryable<WebModelService.ReportModel.Contract.ViewModel.MostBorrowedBookViewModel>
+
+@{
+    ViewBag.Title = "MostBorrowedBooks";
+}
+
+<h2>Most Borrowed Books</h2>
+@(Html.Kendo().Grid(Model)
+        .Name("bookGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(b => b.BookId).Width(100);
+            columns.Bound(b => b.Title).Width(100);
+            columns.Bound(b => b.Author).Width(100);
+            columns.Bound(b => b.ISBN).Width(100);
+            columns.Bound(b => b.BookGenreName).Width(100);
+            columns.Bound(b => b.Count).Width(100);
+            columns.Bound(b => b.BorrowedCount).Width(100);
+
+        })
+        .HtmlAttributes(new { style = "height: 350px;" })
+       
+        .Pageable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Books_Read", "Report"))
+            .PageSize(20)
+            )
+)
+

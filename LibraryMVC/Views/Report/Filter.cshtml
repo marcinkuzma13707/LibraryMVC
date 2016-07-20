@@ -1,0 +1,128 @@
+﻿<h1>Filters</h1>
+<h3>Genre</h3>
+@*@(Html.Kendo().AutoComplete()
+      .Name("AutoCompleteId") //The name of the AutoComplete is mandatory. It specifies the "id" attribute of the widget.
+      .DataTextField("Name") //Specify which property of the Product to be used by the AutoComplete.
+      .Filter("contains")
+      .DataSource(source =>
+      {
+          source.Read(read =>
+          {
+              read.Action("GetGenres2", "Report").Data("onAdditionalData"); //Set the Action and Controller names.
+          })
+          .ServerFiltering(true); //If true, the DataSource will not filter the data on the client.
+      })
+)*@
+@(Html.Kendo().ComboBox()
+          .Name("genreComboBox")
+          .Filter("contains")
+          .Placeholder("Select genre")
+          .DataTextField("Name")
+          .Events(it => it.Change("cbIsChanged"))
+          .DataValueField("BookGenreId")
+          .DataSource(source =>
+      {
+          source.Read(read =>
+          {
+              read.Action("GetGenres", "Report"); //Set the Action and Controller names.
+          })
+          .ServerFiltering(false); //If true, the DataSource will not filter the data on the client.
+      })
+          .Suggest(true)
+          .HtmlAttributes(new { style = "width:30%;" })
+)
+<h3>Title</h3>          
+@(Html.Kendo().AutoComplete()
+      .Name("AutoCompleteTitle") //The name of the AutoComplete is mandatory. It specifies the "id" attribute of the widget.
+      .DataTextField("Title") //Specify which property of the Product to be used by the AutoComplete.
+      .Filter("contains")
+      .DataSource(source =>
+      {
+          source.Read(read =>
+          {
+              read.Action("Books_Read2", "Report").Data("onAdditionalData"); //Set the Action and Controller names.
+          })
+          .ServerFiltering(true); //If true, the DataSource will not filter the data on the client.
+      })
+)
+<h3>Date From</h3>
+@(Html.Kendo().DatePicker()
+              .Name("dateFrom")
+             
+              .HtmlAttributes(new { style = "width: 30%" })
+)
+
+<h3>Date to</h3>
+@(Html.Kendo().DatePicker()
+              .Name("dateTo")
+              
+              .HtmlAttributes(new { style = "width: 30%" })
+)
+<input type="button" class="btn btn-success" value="Filter" id="filterBtn" />
+<input type="button" class="btn btn-danger" value="Reset" id="resetBtn" />
+
+
+
+
+
+
+
+
+
+<script> 
+    cbIsChanged = function (e) {
+        if (this.value() && this.selectedIndex == -1) {   //or use this.dataItem to see if it has an object                 
+            //alert('Invalid Entry!');
+            this.value('');
+        }
+        }
+        function onAdditionalData() {
+            return {
+                //text: $("#AutoCompleteId").val(),
+                title: $("#AutoCompleteTitle").val()
+            };
+        }
+
+        $("#filterBtn").click(function searchGrid() {
+
+            var gridListFilter = { filters: [] };
+            var gridDataSource = $("#bookGrid").data("kendoGrid").dataSource;
+            var e = document.getElementById('genreComboBox');
+            var genre = $("#genreComboBox").val();
+            var title = $("#AutoCompleteTitle").val();
+            //alert(title);
+            //var combo = $("#genreComboBox");
+            //alert(e.value);
+            // // alert(value);
+            //if (combo.val() && combo.selectedIndex == -1) {
+            //    alert("Zly wybor");
+            //}
+            gridListFilter.logic = "and";
+            if (title)
+                gridListFilter.filters.push({ field: "Title", operator: "contains", value: title });
+            if (genre)
+                gridListFilter.filters.push({ field: "BookGenreId", operator: "eq", value: genre });
+
+
+            gridDataSource.filter(gridListFilter);
+            gridDataSource.read();
+        }
+
+         );
+
+
+
+
+
+        $("#resetBtn").click(function searchGrid() {
+            var gridListFilter = { filters: [] };
+            var gridDataSource = $("#bookGrid").data("kendoGrid").dataSource;
+            gridDataSource.filter(gridListFilter);
+            gridDataSource.read();
+        });
+
+
+
+
+
+  </script>
