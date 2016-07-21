@@ -69,51 +69,5 @@
 
 
 <script> 
-    cbIsChanged = function (e) {
-        if (this.value() && this.selectedIndex == -1) {              
-            this.value('');
-        }
-        }
-        function onAdditionalData() {
-            return {
-                title: $("#AutoCompleteTitle").val()
-            };
-        }
-
-        $("#filterBtn").click(function searchGrid() {
-            var genre = $("#genreComboBox").val();
-            var title = $("#AutoCompleteTitle").val();
-            var dateFrom = $("#dateFrom").val();
-            var dateTo = $("#dateTo").val();
-           
-            var url = '@Url.Action("LoadBooksToGrid", "Report")';
-            $.post(url, { genre: genre, title: title, dateFrom: dateFrom, dateTo:dateTo }, function callback(result) {
-                    $.each(result, function(index) {
-                        result[index].AddDate = new Date(parseInt(result[index].AddDate.substr(6)));
-                    });
-                $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
-                $('#bookGrid').data("kendoGrid").dataSource.read();
-                $('#bookGrid').data("kendoGrid").refresh();
-            });
-        });
-
-
-        $("#resetBtn").click(function searchGrid() {
-            var gridDataSource = $("#bookGrid").data("kendoGrid").dataSource;
-            var url = '@Url.Action("Books_Read", "Report")';
-            $.get(url, function callback(result) {
-                $.each(result, function (index) {
-                    result[index].AddDate = new Date(parseInt(result[index].AddDate.substr(6)));
-                });
-                $("#genreComboBox").data("kendoComboBox").text('');
-                $("#AutoCompleteTitle").data("kendoAutoComplete").value("");
-                $("#dateFrom").data("kendoDatePicker").value(null);
-                $("#dateTo").data("kendoDatePicker").value(null);
-                $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
-                $('#bookGrid').data("kendoGrid").dataSource.read();
-                $('#bookGrid').data("kendoGrid").refresh();
-
-            });
-        });
-
+   
   </script>

@@ -20,11 +20,9 @@ namespace LibraryMVC.Controllers
 
       
         private IReportService _reportService;
-        private IBookService _bookService;
-        public ReportController(IReportService reportService, IUserService userService, IBookService bookService)
+        public ReportController(IReportService reportService, IUserService userService)
         {
             this._reportService = reportService;
-            this._bookService = bookService;
         }
 
         [HttpGet]
@@ -32,56 +30,50 @@ namespace LibraryMVC.Controllers
         {
             return View();
         }
+
         [HttpGet]
         public ActionResult MostActiveUsers()
         {
             List<UserViewModel> users = _reportService.GetUserList();
             return View(users);
         }
+
         [HttpPost]
         public ActionResult Users_Read([DataSourceRequest] DataSourceRequest request)
         {
             var data = _reportService.GetUserList();
             return Json(data.ToDataSourceResult(request));
         }
+
         [HttpGet]
         public ActionResult MostBorrowedBooks()
         {
             IQueryable<MostBorrowedBookViewModel> books = _reportService.GetBookList();
             return View(books);
         }
+
         [HttpGet]
         public ActionResult Books_Read()
         {
             var data = _reportService.GetBookList();
             return Json(data,JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
-        public ActionResult LoadBooksToGrid(string title, string genre, string dateFrom, string dateTo)
+        public ActionResult LoadBooksToGrid(string title, int? genre, DateTime? dateFrom, DateTime? dateTo)
         {
-            DateTime? minDate = null;
-            DateTime? maxDate = null;
-            if (!string.IsNullOrEmpty(dateFrom))
-            {
-                minDate = DateTime.Parse(dateFrom);
-            }
-            if (!string.IsNullOrEmpty(dateTo))
-             { 
-                 maxDate = DateTime.Parse(dateTo);
-             }
-            int genreId;
-            int.TryParse(genre,out genreId);
-            IQueryable < MostBorrowedBookViewModel >request = _reportService.GetFilteredBooks(title, genreId,minDate,maxDate);
+            IQueryable<MostBorrowedBookViewModel> request = _reportService.GetFilteredBooks(title, genre, dateFrom, dateTo);
             return Json(request, JsonRequestBehavior.AllowGet);
         }
       
         [HttpGet]
         public ActionResult GetGenres()
         {
-            var genreList = _bookService.GenreList();
+            var genreList = _reportService.GenreList();
             return Json(genreList, JsonRequestBehavior.AllowGet);
         }
-      [HttpGet]
+
+        [HttpGet]
         public JsonResult GetTitles(string title)
         {
             var data = _reportService.GetBookList().AsEnumerable();

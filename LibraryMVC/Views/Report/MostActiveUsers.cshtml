@@ -11,13 +11,14 @@
         {
             columns.Bound(b => b.UserId).Width(100).Filterable(false);
             columns.Bound(b => b.FirstName).Width(100).Filterable(false);
-            columns.Bound(b => b.LastName).Width(100).Filterable(ftb => ftb.Cell(cell => cell.Operator("startswith")));
+            columns.Bound(b => b.LastName).Width(100).Filterable(x => x.Enabled(true));//.Filterable(ftb => ftb.Cell(cell => cell.Operator("startswith")));
             columns.Bound(b => b.BooksBorrowed).Width(100).Filterable(false);
             //columns.Command(command => command.Custom("Show books").Click("viewBooks")).Width(80);
         })
         .HtmlAttributes(new { style = "height: 350px;" })
         .Scrollable()
-        .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+        .Filterable()
+        //.Filterable(ftb => ftb.Mode(GridFilterMode.Row))
         .Groupable()
         .Sortable()
         .Pageable()

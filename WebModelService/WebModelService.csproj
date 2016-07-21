@@ -57,6 +57,7 @@
     <Compile Include="BorrowModel\Contract\ViewModel\NewBorrowViewModel.cs" />
     <Compile Include="BorrowModel\IBorrowService.cs" />
     <Compile Include="DictBookGenreModel\Contract\ViewModel\DictBookGenreViewModel.cs" />
+    <Compile Include="ReportModel\Contract\ViewModel\BookGenreViewModel.cs" />
     <Compile Include="ReportModel\Contract\ViewModel\MostBorrowedBookViewModel.cs" />
     <Compile Include="ReportModel\IReportService.cs" />
     <Compile Include="ReportModel\ReportService.cs" />

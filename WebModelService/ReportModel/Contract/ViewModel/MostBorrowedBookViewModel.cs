@@ -22,6 +22,15 @@ namespace WebModelService.ReportModel.Contract.ViewModel
         public DateTime? ReleaseDate { get; set; }
         public DateTime AddDate { get; set; }
 
+        public string AddDateDisplay
+        {
+            get
+            {
+                return this.AddDate.ToShortDateString();
+            }
+        }
+
+
         public string ISBN { get; set; }
         public string BookGenreName { get; set; }
 
@@ -31,7 +40,7 @@ namespace WebModelService.ReportModel.Contract.ViewModel
 
         public int BorrowedCount { get; set; }
 
-        public virtual DictBookGenreViewModel DictBookGenre { get; set; }
+        public virtual BookGenreViewModel DictBookGenre { get; set; }
 
     }
 }

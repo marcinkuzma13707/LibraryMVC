@@ -51,7 +51,7 @@ namespace WebModelService.ReportModel
             {
                 query = (from book in query where book.Title.Contains(title) select book);
             }
-            if (genreId!=null&&genreId!=0)
+            if (genreId.HasValue)
             {
                 query = (from book in query where book.BookGenreId==genreId select book);
             }
@@ -102,6 +102,16 @@ namespace WebModelService.ReportModel
                                FullName = user.FirstName + " " + user.LastName
                            });
             return userList.ToList();
+        }
+        public List<BookGenreViewModel> GenreList()
+        {
+            var query = (from genre in _library.DictBookGenre
+                         select new BookGenreViewModel
+                         {
+                             BookGenreId = genre.BookGenreId,
+                             Name = genre.Name
+                         });
+            return query.ToList();
         }
     }
 }
