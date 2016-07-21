@@ -35,10 +35,53 @@ namespace WebModelService.ReportModel
                              BookGenreId=book.BookGenreId,
                              BookGenreName = genres.Name,
                              Count = book.Count,
+                             AddDate=book.AddDate,
                              BorrowedCount=book.Borrow.Count
                              
                          });
+
             return query;
+        }
+
+        public IQueryable<MostBorrowedBookViewModel> GetFilteredBooks(string title, int? genreId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            var query = (from book in _library.Book select book);
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                query = (from book in query where book.Title.Contains(title) select book);
+            }
+            if (genreId!=null&&genreId!=0)
+            {
+                query = (from book in query where book.BookGenreId==genreId select book);
+            }
+            if (dateFrom.HasValue)
+            {
+                query = (from book in query where book.AddDate>dateFrom select book);
+            }
+            if (dateTo.HasValue)
+            {
+                query = (from book in query where book.AddDate < dateTo select book);
+            }
+
+            var filteredBooks = (from book in query
+                          join genres in _library.DictBookGenre on book.BookGenreId equals genres.BookGenreId
+                          orderby book.Borrow.Count descending
+                          select new MostBorrowedBookViewModel
+                          {
+                              BookId = book.BookId,
+                              Author = book.Author,
+                              Title = book.Title,
+                              ReleaseDate = book.ReleaseDate,
+                              ISBN = book.ISBN,
+                              BookGenreId = book.BookGenreId,
+                              BookGenreName = genres.Name,
+                              Count = book.Count,
+                              AddDate = book.AddDate,
+                              BorrowedCount = book.Borrow.Count
+                          });
+
+                return filteredBooks;
         }
 
         public List<UserViewModel> GetUserList()

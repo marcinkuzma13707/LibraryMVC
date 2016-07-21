@@ -15,16 +15,12 @@
             columns.Bound(b => b.ISBN).Width(100);
             columns.Bound(b => b.BookGenreName).Width(100);
             columns.Bound(b => b.Count).Width(100);
+            columns.Bound(b => b.AddDate).Format("{0:dd-MM-yyyy}").Width(100);
             columns.Bound(b => b.BorrowedCount).Width(100);
 
         })
         .HtmlAttributes(new { style = "height: 350px;" })
-       
-        .Pageable()
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .Read(read => read.Action("Books_Read", "Report"))
-            .PageSize(20)
-            )
-)
 
+        .Pageable()
+)
+<br /><br />

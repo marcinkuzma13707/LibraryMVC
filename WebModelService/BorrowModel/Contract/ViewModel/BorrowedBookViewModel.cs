@@ -18,9 +18,17 @@ namespace WebModelService.BorrowModel.Contract.ViewModel
         public int BookId { get; set; }
         [DisplayName("User")]
 
-        public string User { get; set; }
+        public string User
+        {
+            get
+            {
+                return this.FirstName + " " + this.LastName;
+            }
+        }
 
         [DisplayName("Book title")]
         public string Title { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace WebModelService.ReportModel.Contract.ViewModel
         public string Title { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
-
+        public DateTime AddDate { get; set; }
 
         public string ISBN { get; set; }
         public string BookGenreName { get; set; }

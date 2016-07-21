@@ -13,5 +13,6 @@ namespace WebModelService.Interfaces
     {
         List<UserViewModel> GetUserList();
         IQueryable<MostBorrowedBookViewModel> GetBookList();
+        IQueryable<MostBorrowedBookViewModel> GetFilteredBooks(string title, int? genreId, DateTime? dateFrom, DateTime? dateTo);
     }
 }

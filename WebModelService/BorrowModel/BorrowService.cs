@@ -21,20 +21,22 @@ namespace WebModelService.BorrowModel
 
         public void AddNewBorrow(NewBorrowViewModel newBorrowViewModel)
         {
-            foreach(var bookId in newBorrowViewModel.ChosenBooks)
+            User user= (from users in _library.User where users.UserId == newBorrowViewModel.UserId select users).SingleOrDefault();
+            List<Book> books = (from book in _library.Book select book).ToList();
+            foreach (var bookId in newBorrowViewModel.ChosenBooks)
             {
                 Borrow borrow = new Borrow();
-                borrow.User = (from user in _library.User where user.UserId == newBorrowViewModel.UserId select user).SingleOrDefault();
-                borrow.Book=(from book in _library.Book where book.BookId==bookId select book).SingleOrDefault();
+                borrow.User = user;
+                borrow.Book = books.Single(x => x.BookId == bookId);
                 borrow.FromDate = DateTime.Now;
                 borrow.ToDate =newBorrowViewModel.ToDate ?? DateTime.Now;
-                _library.Borrow.Add(borrow);
-                _library.SaveChanges();
+                _library.Borrow.Add(borrow);   
             }
-
+            _library.SaveChanges();
         }
 
-        public List<BookToBorrow> GetAvaibleBooks()
+
+public List<BookToBorrow> GetAvaibleBooks()
         {
             var query = (from book in _library.Book where book.Count > book.Borrow.Count(returnFlag => returnFlag.IsReturned == false)
                          select new BookToBorrow
@@ -55,7 +57,8 @@ namespace WebModelService.BorrowModel
                              UserId = borrow.UserId,
                              BorrowId = borrow.BorrowId,
                              Title = borrow.Book.Title,
-                             User = borrow.User.FirstName + " " + borrow.User.LastName
+                             FirstName = borrow.User.FirstName,
+                             LastName = borrow.User.LastName
                          });
             return query.ToList();
         }
@@ -124,10 +127,12 @@ namespace WebModelService.BorrowModel
         }
 
         public void ReturnBooks(int[] booksToReturn)
-        {   foreach(int borrowId in booksToReturn) {
-                var query = (from borrow in _library.Borrow where borrow.BorrowId == borrowId select borrow).SingleOrDefault();
-                query.IsReturned = true;
-        }
+        {
+            List<Borrow> borrowList = (from borrows in _library.Borrow select borrows).ToList();
+            foreach (int borrowId in booksToReturn)
+            {
+                borrowList.Find(b => b.BorrowId == borrowId).IsReturned = true;
+            }
             _library.SaveChanges();
         }
     }
