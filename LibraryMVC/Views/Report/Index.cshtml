@@ -11,51 +11,53 @@
 
 
 <script>
-    onAdditionalData = '';
     var module = (function () {
         var api = {};
-
         api.bindEvents = function () {
-            $(document).on("click", "#filterBtn", function searchGrid() {
-                var genre = $("#genreComboBox").val();
-                var title = $("#AutoCompleteTitle").val();
-                var dateFrom = $("#dateFrom").val();
-                var dateTo = $("#dateTo").val();
-
-                var url = '@Url.Action("LoadBooksToGrid", "Report")';
-                $.post(url, { genre: genre, title: title, dateFrom: dateFrom, dateTo: dateTo }, function callback(result) {
-                    $.each(result, function (index) {
-                        result[index].AddDate = result[index].AddDateDisplay;
-                    });
-                    $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
-                    $('#bookGrid').data("kendoGrid").dataSource.read();
-                    $('#bookGrid').data("kendoGrid").refresh();
-                });
-            });
-            $(document).on("click", "#resetBtn", function searchGrid() {
-                var gridDataSource = $("#bookGrid").data("kendoGrid").dataSource;
-                var url = '@Url.Action("Books_Read", "Report")';
-                $.get(url, function callback(result) {
-                    $.each(result, function (index) {
-                        result[index].AddDate = result[index].AddDateDisplay;                        
-                    });
-                    $("#genreComboBox").data("kendoComboBox").text('');
-                    $("#AutoCompleteTitle").data("kendoAutoComplete").value("");
-                    $("#dateFrom").data("kendoDatePicker").value(null);
-                    $("#dateTo").data("kendoDatePicker").value(null);
-                    $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
-                    $('#bookGrid').data("kendoGrid").dataSource.read();
-                    $('#bookGrid').data("kendoGrid").refresh();
-                });
-            });
-
+            $(document).on("click", "#filterBtn", searchGrid);
+            $(document).on("click", "#resetBtn", resetFilters);
         }
 
-        function onAdditionalData() {
+        function resetFilters() {
+            var gridDataSource = $("#bookGrid").data("kendoGrid").dataSource;
+            var url = '@Url.Action("Books_Read", "Report")';
+            $.get(url, function callback(result) {
+                $.each(result, function (index) {
+                    result[index].AddDate = result[index].AddDateDisplay;
+                });
+                $("#genreComboBox").data("kendoComboBox").text('');
+                $("#AutoCompleteTitle").data("kendoAutoComplete").value("");
+                $("#dateFrom").data("kendoDatePicker").value(null);
+                $("#dateTo").data("kendoDatePicker").value(null);
+                $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
+                $('#bookGrid').data("kendoGrid").dataSource.read();
+                $('#bookGrid').data("kendoGrid").refresh();
+            });
+        }
+
+        function searchGrid() {
+            var genre = $("#genreComboBox").val();
+            var title = $("#AutoCompleteTitle").val();
+            var dateFrom = $("#dateFrom").val();
+            var dateTo = $("#dateTo").val();
+
+            var url = '@Url.Action("LoadBooksToGrid", "Report")';
+            $.post(url, { genre: genre, title: title, dateFrom: dateFrom, dateTo: dateTo }, function callback(result) {
+                $.each(result, function (index) {
+                    result[index].AddDate = result[index].AddDateDisplay;
+                });
+                $('#bookGrid').data("kendoGrid").dataSource = new kendo.data.DataSource({ data: result });
+                $('#bookGrid').data("kendoGrid").dataSource.read();
+                $('#bookGrid').data("kendoGrid").refresh();
+            });
+        }
+
+        api.onAdditionalData = function() {
             return {
                 title: $("#AutoCompleteTitle").val()
             };
         }
+    
         cbIsChanged = function (e) {
             if (this.value() && this.selectedIndex == -1) {
                 this.value('');
@@ -66,7 +68,7 @@
 
     })();
     $(document).ready(function () {
-        module.bindEvents();
+        module.bindEvents();   
     });
 
 </script>
